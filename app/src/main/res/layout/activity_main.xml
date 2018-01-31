@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.kickingmobiledev.customviewjava.MainActivity">
 
-    <com.kickingmobiledev.customviewjava.ui.widgets.SquareTextView
+    <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
         android:background="@color/colorAccent"
         android:gravity="center"
+        app:aspect_ratio="one_to_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
