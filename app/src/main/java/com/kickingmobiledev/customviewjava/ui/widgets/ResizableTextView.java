@@ -2,6 +2,8 @@ package com.kickingmobiledev.customviewjava.ui.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
@@ -90,6 +92,68 @@ public class ResizableTextView extends AppCompatTextView {
         if (this.aspectRatio != aspectRatio) {
             this.aspectRatio = aspectRatio;
             requestLayout();
+        }
+    }
+
+    @Override
+    public Parcelable onSaveInstanceState() {
+        Parcelable superState = super.onSaveInstanceState();
+
+        SavedState ss = new SavedState(superState);
+        ss.aspectRatio = aspectRatio;
+
+        return ss;
+    }
+
+    @Override
+    public void onRestoreInstanceState(Parcelable state) {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        SavedState ss = (SavedState) state;
+        super.onRestoreInstanceState(ss.getSuperState());
+
+        setAspectRatio(ss.aspectRatio);
+    }
+
+    public static class SavedState extends BaseSavedState {
+        int aspectRatio = NORMAL_ASPECT_RATIO;
+
+        SavedState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+            out.writeInt(aspectRatio);
+        }
+
+        @Override
+        public String toString() {
+            String str = "ResizableTextView.SavedState{"
+                    + Integer.toHexString(System.identityHashCode(this))
+                    + " aspectRatio=" + aspectRatio;
+            return str + "}";
+        }
+
+        @SuppressWarnings("hiding")
+        public static final Parcelable.Creator<ResizableTextView.SavedState> CREATOR =
+                new Parcelable.Creator<ResizableTextView.SavedState>() {
+                    public ResizableTextView.SavedState createFromParcel(Parcel in) {
+                        return new ResizableTextView.SavedState(in);
+                    }
+
+                    public ResizableTextView.SavedState[] newArray(int size) {
+                        return new ResizableTextView.SavedState[size];
+                    }
+                };
+
+        private SavedState(Parcel in) {
+            super(in);
+            aspectRatio = in.readInt();
         }
     }
 }
