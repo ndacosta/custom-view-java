@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.kickingmobiledev.customviewjava.ui.activities.MainActivity">
+        tools:context="com.kickingmobiledev.customviewjava.ui.activities.Section3Activity">
 
         <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
             android:id="@+id/resizableTextView"
@@ -69,4 +69,5 @@
             app:layout_constraintStart_toEndOf="@+id/twoTo3" />
 
     </android.support.constraint.ConstraintLayout>
+
 </layout>

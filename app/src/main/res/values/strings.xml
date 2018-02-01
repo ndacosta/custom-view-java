@@ -4,8 +4,9 @@
     <string name="one_to_1">1:1</string>
     <string name="one_to_2">1:2</string>
     <string name="normal">Normal</string>
-    <string name="section1">Section 1: New View</string>
+    <string name="section1">Section 1: Square Text View</string>
     <string name="section2">Section 2: Custom attribute</string>
     <string name="section3">Section 3: Changing attribute dynamically</string>
     <string name="section2_description">Same width, different ratios</string>
+    <string name="edit_text_hint">Change text here</string>
 </resources>
