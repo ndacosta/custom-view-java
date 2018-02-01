@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Custom View</string>
+    <string name="app_name">Custom View Demo</string>
     <string name="two_to_3">2:3</string>
     <string name="one_to_1">1:1</string>
     <string name="one_to_2">1:2</string>
