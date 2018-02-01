@@ -22,25 +22,25 @@ public class ResizableTextView extends AppCompatTextView {
     /**
      * This view wants its default size.
      */
-    public static final int NORMAL = 0;
+    public static final int NORMAL_ASPECT_RATIO = 0;
 
     /**
      * This view wants an aspect ratio of 1:2.
      */
-    public static final int ONE_TO_2 = 1;
+    public static final int ONE_TO_2_ASPECT_RATIO = 1;
 
     /**
      * This view wants an aspect ratio of 2:3.
      */
-    public static final int TWO_TO_3 = 2;
+    public static final int TWO_TO_3_ASPECT_RATIO = 2;
 
     /**
      * This view wants to be square.
      */
-    public static final int ONE_TO_1 = 3;
+    public static final int ONE_TO_1_ASPECT_RATIO = 3;
 
 
-    @IntDef({NORMAL, ONE_TO_2, TWO_TO_3, ONE_TO_1})
+    @IntDef({NORMAL_ASPECT_RATIO, ONE_TO_2_ASPECT_RATIO, TWO_TO_3_ASPECT_RATIO, ONE_TO_1_ASPECT_RATIO})
     @Retention(RetentionPolicy.SOURCE)
     public @interface AspectRatio {
     }
@@ -56,14 +56,14 @@ public class ResizableTextView extends AppCompatTextView {
     public ResizableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ResizableTextView);
-        aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL);
+        aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
         a.recycle();
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (aspectRatio == NORMAL) {
+        if (aspectRatio == NORMAL_ASPECT_RATIO) {
             return;
         }
         int size = Math.max(getMeasuredWidth(), getMeasuredHeight());
@@ -75,15 +75,21 @@ public class ResizableTextView extends AppCompatTextView {
 
     private int calculateSize(int originalSize) {
         switch (aspectRatio) {
-            case ONE_TO_1:
+            case ONE_TO_1_ASPECT_RATIO:
                 return originalSize;
-            case ONE_TO_2:
+            case ONE_TO_2_ASPECT_RATIO:
                 return originalSize / 2;
-            case TWO_TO_3:
+            case TWO_TO_3_ASPECT_RATIO:
                 return (originalSize * 2) / 3;
             default:
                 return -1;
         }
     }
 
+    public void setAspectRatio(@AspectRatio int aspectRatio) {
+        if (this.aspectRatio != aspectRatio) {
+            this.aspectRatio = aspectRatio;
+            requestLayout();
+        }
+    }
 }

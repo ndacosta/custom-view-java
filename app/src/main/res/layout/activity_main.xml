@@ -1,21 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.kickingmobiledev.customviewjava.MainActivity">
+<layout>
 
-    <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:background="@color/colorAccent"
-        android:gravity="center"
-        app:aspect_ratio="one_to_2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/section1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/list_item_height"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:onClick="onClickButton"
+            android:paddingEnd="@dimen/list_item_horizontal_padding"
+            android:paddingLeft="@dimen/list_item_horizontal_padding"
+            android:paddingRight="@dimen/list_item_horizontal_padding"
+            android:paddingStart="@dimen/list_item_horizontal_padding"
+            android:text="@string/section1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/section2"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/list_item_height"
+            android:gravity="center_vertical"
+            android:onClick="onClickButton"
+            android:paddingEnd="@dimen/list_item_horizontal_padding"
+            android:paddingLeft="@dimen/list_item_horizontal_padding"
+            android:paddingRight="@dimen/list_item_horizontal_padding"
+            android:paddingStart="@dimen/list_item_horizontal_padding"
+            android:text="@string/section2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/section1" />
+
+        <TextView
+            android:id="@+id/section3"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/list_item_height"
+            android:gravity="center_vertical"
+            android:onClick="onClickButton"
+            android:paddingEnd="@dimen/list_item_horizontal_padding"
+            android:paddingLeft="@dimen/list_item_horizontal_padding"
+            android:paddingRight="@dimen/list_item_horizontal_padding"
+            android:paddingStart="@dimen/list_item_horizontal_padding"
+            android:text="@string/section3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/section2" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
