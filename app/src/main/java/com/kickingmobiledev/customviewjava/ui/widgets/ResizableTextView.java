@@ -168,6 +168,7 @@ public class ResizableTextView extends AppCompatTextView {
                 final float x = event.getX(mActivePointerId);
                 final float y = event.getY(mActivePointerId);
                 Rect rect = frontDrawable.getBounds();
+                setPressed(true);
                 if (rect.contains((int) x, (int) y)) {
                     onStartTrackingTouch();
                     trackTouchEvent(event);
@@ -181,6 +182,7 @@ public class ResizableTextView extends AppCompatTextView {
             case MotionEvent.ACTION_UP:
                 performClick();
             case MotionEvent.ACTION_CANCEL:
+                setPressed(false);
                 if (mIsDragging) {
                     onStopTrackingTouch();
                 }
@@ -195,12 +197,10 @@ public class ResizableTextView extends AppCompatTextView {
     }
 
     private void onStartTrackingTouch() {
-        setPressed(true);
         mIsDragging = true;
     }
 
     private void onStopTrackingTouch() {
-        setPressed(false);
         mIsDragging = false;
     }
 
