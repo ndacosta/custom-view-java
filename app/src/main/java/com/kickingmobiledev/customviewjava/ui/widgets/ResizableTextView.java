@@ -3,14 +3,18 @@ package com.kickingmobiledev.customviewjava.ui.widgets;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.kickingmobiledev.customviewjava.R;
 
@@ -49,10 +53,13 @@ public class ResizableTextView extends AppCompatTextView {
     public @interface AspectRatio {
     }
 
+
     private int aspectRatio;
 
     private Drawable frontDrawable;
     private int frontDrawableResource;
+
+    private boolean mIsDragging;
 
     public ResizableTextView(Context context) {
         this(context, null);
@@ -71,6 +78,11 @@ public class ResizableTextView extends AppCompatTextView {
             switch (attr) {
                 case R.styleable.ResizableTextView_front_drawable:
                     frontDrawable = a.getDrawable(attr);
+                    if (frontDrawable != null) {
+                        frontDrawable.setBounds(0, 0,
+                                frontDrawable.getIntrinsicWidth(),
+                                frontDrawable.getIntrinsicHeight());
+                    }
                     break;
                 case R.styleable.ResizableTextView_aspect_ratio:
                     aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
@@ -110,9 +122,6 @@ public class ResizableTextView extends AppCompatTextView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (frontDrawable != null) {
-            frontDrawable.setBounds(getPaddingLeft(), getPaddingTop(),
-                    getWidth() - getPaddingLeft() - getPaddingRight(),
-                    getHeight() - getPaddingTop() - getPaddingBottom());
             frontDrawable.draw(canvas);
         }
     }
@@ -142,6 +151,70 @@ public class ResizableTextView extends AppCompatTextView {
         }
     }
 
+    /**
+     * Handles drawable selection and movement
+     */
+    @Override
+    public synchronized boolean onTouchEvent(MotionEvent event) {
+
+        if (!isEnabled() || frontDrawable == null)
+            return false;
+
+        final int action = event.getAction();
+
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                final int mActivePointerId = event.getPointerId(event.getPointerCount() - 1);
+                final float x = event.getX(mActivePointerId);
+                final float y = event.getY(mActivePointerId);
+                Rect rect = frontDrawable.getBounds();
+                if (rect.contains((int) x, (int) y)) {
+                    onStartTrackingTouch();
+                    trackTouchEvent(event);
+                }
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (mIsDragging) {
+                    trackTouchEvent(event);
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                performClick();
+            case MotionEvent.ACTION_CANCEL:
+                if (mIsDragging) {
+                    onStopTrackingTouch();
+                }
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
+
+    private void onStartTrackingTouch() {
+        setPressed(true);
+        mIsDragging = true;
+    }
+
+    private void onStopTrackingTouch() {
+        setPressed(false);
+        mIsDragging = false;
+    }
+
+    protected void trackTouchEvent(MotionEvent event) {
+        final int pointerIndex = event.findPointerIndex(event.getPointerCount() - 1);
+        final int x = (int) event.getX(pointerIndex);
+        final int y = (int) event.getY(pointerIndex);
+        frontDrawable.setBounds(x - frontDrawable.getIntrinsicWidth() / 2,
+                y - frontDrawable.getIntrinsicHeight() / 2,
+                frontDrawable.getIntrinsicWidth() / 2 + x,
+                frontDrawable.getIntrinsicHeight() / 2 + y);
+        invalidate();
+    }
+
     public void setAspectRatio(@AspectRatio int aspectRatio) {
         if (this.aspectRatio != aspectRatio) {
             this.aspectRatio = aspectRatio;
@@ -153,9 +226,14 @@ public class ResizableTextView extends AppCompatTextView {
         return aspectRatio;
     }
 
-    public void setFrontDrawable(Drawable frontDrawable) {
+    public void setFrontDrawable(@Nullable Drawable frontDrawable) {
         if (this.frontDrawable != frontDrawable) {
             this.frontDrawable = frontDrawable;
+            if (frontDrawable != null) {
+                frontDrawable.setBounds(0, 0,
+                        frontDrawable.getIntrinsicWidth(),
+                        frontDrawable.getIntrinsicHeight());
+            }
             invalidate();
             frontDrawableResource = 0;
         }

@@ -34,6 +34,9 @@
         <activity
             android:name=".ui.activities.Section7Activity"
             android:label="@string/section7" />
+        <activity
+            android:name=".ui.activities.Section8Activity"
+            android:label="@string/section8" />
     </application>
 
 </manifest>
