@@ -87,6 +87,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/section5" />
 
+        <TextView
+            android:id="@+id/section7"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/list_item_height"
+            android:gravity="center_vertical"
+            android:onClick="onClickButton"
+            android:paddingEnd="@dimen/list_item_horizontal_padding"
+            android:paddingLeft="@dimen/list_item_horizontal_padding"
+            android:paddingRight="@dimen/list_item_horizontal_padding"
+            android:paddingStart="@dimen/list_item_horizontal_padding"
+            android:text="@string/section7"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/section6" />
+
     </android.support.constraint.ConstraintLayout>
 
 </layout>

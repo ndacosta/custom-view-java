@@ -117,6 +117,31 @@ public class ResizableTextView extends AppCompatTextView {
         }
     }
 
+    @Override
+    public void jumpDrawablesToCurrentState() {
+        super.jumpDrawablesToCurrentState();
+
+        if (frontDrawable != null) {
+            frontDrawable.jumpToCurrentState();
+        }
+    }
+
+    @Override
+    protected void drawableStateChanged() {
+        super.drawableStateChanged();
+
+        final int[] state = getDrawableState();
+        boolean changed = false;
+
+        final Drawable fd = frontDrawable;
+        if (fd != null && fd.isStateful()) {
+            changed = fd.setState(state);
+        }
+        if (changed) {
+            invalidate();
+        }
+    }
+
     public void setAspectRatio(@AspectRatio int aspectRatio) {
         if (this.aspectRatio != aspectRatio) {
             this.aspectRatio = aspectRatio;

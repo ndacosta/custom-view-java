@@ -6,7 +6,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.kickingmobiledev.customviewjava.ui.activities.Section5Activity">
+        tools:context="com.kickingmobiledev.customviewjava.ui.activities.Section6Activity">
 
         <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
             android:id="@+id/textView"
