@@ -2,6 +2,8 @@ package com.kickingmobiledev.customviewjava.ui.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
@@ -20,6 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 public class ResizableTextView extends AppCompatTextView {
 
     private int aspectRatio;
+    private Drawable frontDrawable;
 
     /**
      * This view wants its default size.
@@ -58,7 +61,18 @@ public class ResizableTextView extends AppCompatTextView {
     public ResizableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ResizableTextView);
-        aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
+        final int N = a.getIndexCount();
+        for (int i = 0; i < N; i++) {
+            int attr = a.getIndex(i);
+            switch (attr) {
+                case R.styleable.ResizableTextView_front_drawable:
+                    frontDrawable = a.getDrawable(attr);
+                    break;
+                case R.styleable.ResizableTextView_aspect_ratio:
+                    aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
+                    break;
+            }
+        }
         a.recycle();
     }
 
@@ -85,6 +99,17 @@ public class ResizableTextView extends AppCompatTextView {
                 return (originalSize * 2) / 3;
             default:
                 return -1;
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (frontDrawable != null) {
+            frontDrawable.setBounds(getPaddingLeft(), getPaddingTop(),
+                    getWidth() - getPaddingLeft() - getPaddingRight(),
+                    getHeight() - getPaddingTop() - getPaddingBottom());
+            frontDrawable.draw(canvas);
         }
     }
 

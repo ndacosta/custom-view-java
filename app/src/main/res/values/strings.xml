@@ -9,4 +9,6 @@
     <string name="section3">Section 3: Changing attribute dynamically</string>
     <string name="section2_description">Same width, different ratios</string>
     <string name="edit_text_hint">Change text here</string>
+    <string name="section5">Section 5: Adding a drawable attribute</string>
+    <string name="banned_text">This is a banned TextView</string>
 </resources>

@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.section3:
                 Section3Activity.start(this);
                 break;
+            case R.id.section5:
+                Section5Activity.start(this);
+                break;
         }
     }
 }

@@ -25,6 +25,9 @@
         <activity
             android:name=".ui.activities.Section3Activity"
             android:label="@string/section3" />
+        <activity
+            android:name=".ui.activities.Section5Activity"
+            android:label="@string/section3" />
     </application>
 
 </manifest>
