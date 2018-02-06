@@ -6,7 +6,9 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
@@ -20,9 +22,6 @@ import java.lang.annotation.RetentionPolicy;
  */
 
 public class ResizableTextView extends AppCompatTextView {
-
-    private int aspectRatio;
-    private Drawable frontDrawable;
 
     /**
      * This view wants its default size.
@@ -49,6 +48,11 @@ public class ResizableTextView extends AppCompatTextView {
     @Retention(RetentionPolicy.SOURCE)
     public @interface AspectRatio {
     }
+
+    private int aspectRatio;
+
+    private Drawable frontDrawable;
+    private int frontDrawableResource;
 
     public ResizableTextView(Context context) {
         this(context, null);
@@ -118,6 +122,36 @@ public class ResizableTextView extends AppCompatTextView {
             this.aspectRatio = aspectRatio;
             requestLayout();
         }
+    }
+
+    public int getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public void setFrontDrawable(Drawable frontDrawable) {
+        if (this.frontDrawable != frontDrawable) {
+            this.frontDrawable = frontDrawable;
+            invalidate();
+            frontDrawableResource = 0;
+        }
+    }
+
+    public void setFrontDrawableResource(@DrawableRes int resId) {
+        if (resId != 0 && resId == frontDrawableResource) {
+            return;
+        }
+
+        Drawable d = null;
+        if (resId != 0) {
+            d = ContextCompat.getDrawable(getContext(), resId);
+        }
+        setFrontDrawable(d);
+
+        frontDrawableResource = resId;
+    }
+
+    public Drawable getFrontDrawable() {
+        return frontDrawable;
     }
 
     @Override
