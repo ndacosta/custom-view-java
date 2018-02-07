@@ -9,5 +9,6 @@
         </attr>
         <attr name="front_drawable" format="reference"/>
         <attr name="text_spans" format="reference" />
+        <attr name="editable" format="boolean" />
     </declare-styleable>
 </resources>

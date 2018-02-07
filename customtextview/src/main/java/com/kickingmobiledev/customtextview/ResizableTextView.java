@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -83,6 +86,10 @@ public class ResizableTextView extends AppCompatTextView {
     private int frontDrawableResource;
 
     private boolean mIsDragging;
+    private boolean editable;
+
+    private Paint paint;
+    private Path path;
 
     public ResizableTextView(Context context) {
         this(context, null);
@@ -107,7 +114,22 @@ public class ResizableTextView extends AppCompatTextView {
             XmlResourceParser parser = a.getResources().getXml(textSpanId);
             applySpans(parser);
         }
+        editable = a.getBoolean(R.styleable.ResizableTextView_editable, false);
+        if (editable) {
+            setupDrawing();
+        }
         a.recycle();
+    }
+
+    private void setupDrawing() {
+        path = new Path();
+        paint = new Paint();
+        paint.setColor(Color.BLUE);
+        paint.setAntiAlias(true);
+        paint.setStrokeWidth(10);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
+        paint.setStrokeCap(Paint.Cap.ROUND);
     }
 
     private void applySpans(XmlResourceParser parser) {
@@ -207,6 +229,9 @@ public class ResizableTextView extends AppCompatTextView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (editable) {
+            canvas.drawPath(path, paint);
+        }
         if (frontDrawable != null) {
             frontDrawable.draw(canvas);
         }
@@ -251,25 +276,33 @@ public class ResizableTextView extends AppCompatTextView {
      */
     @Override
     public synchronized boolean onTouchEvent(MotionEvent event) {
-
-        if (!isEnabled() || frontDrawable == null)
-            return false;
+        final float x = event.getX();
+        final float y = event.getY();
 
         final int action = event.getAction();
 
+        if (frontDrawable == null && !editable) {
+            return false;
+        }
+
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                final int mActivePointerId = event.getPointerId(event.getPointerCount() - 1);
-                final float x = event.getX(mActivePointerId);
-                final float y = event.getY(mActivePointerId);
-                Rect rect = frontDrawable.getBounds();
                 setPressed(true);
-                if (rect.contains((int) x, (int) y)) {
-                    onStartTrackingTouch();
-                    trackTouchEvent(event);
+                if (editable) {
+                    path.moveTo(x, y);
+                }
+                if (frontDrawable != null) {
+                    Rect rect = frontDrawable.getBounds();
+                    if (rect.contains((int) x, (int) y)) {
+                        onStartTrackingTouch();
+                        trackTouchEvent(event);
+                    }
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (editable) {
+                    path.lineTo(x, y);
+                }
                 if (mIsDragging) {
                     trackTouchEvent(event);
                 }
@@ -278,11 +311,15 @@ public class ResizableTextView extends AppCompatTextView {
                 performClick();
             case MotionEvent.ACTION_CANCEL:
                 setPressed(false);
+                if (editable) {
+                    path.lineTo(x, y);
+                }
                 if (mIsDragging) {
                     onStopTrackingTouch();
                 }
                 break;
         }
+        invalidate();
         return true;
     }
 
@@ -300,14 +337,12 @@ public class ResizableTextView extends AppCompatTextView {
     }
 
     protected void trackTouchEvent(MotionEvent event) {
-        final int pointerIndex = event.findPointerIndex(event.getPointerCount() - 1);
-        final int x = (int) event.getX(pointerIndex);
-        final int y = (int) event.getY(pointerIndex);
+        final int x = (int) event.getX();
+        final int y = (int) event.getY();
         frontDrawable.setBounds(x - frontDrawable.getIntrinsicWidth() / 2,
                 y - frontDrawable.getIntrinsicHeight() / 2,
                 frontDrawable.getIntrinsicWidth() / 2 + x,
                 frontDrawable.getIntrinsicHeight() / 2 + y);
-        invalidate();
     }
 
     @Override
