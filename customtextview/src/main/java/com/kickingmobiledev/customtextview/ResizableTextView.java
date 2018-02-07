@@ -1,5 +1,7 @@
 package com.kickingmobiledev.customtextview;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
@@ -306,6 +308,43 @@ public class ResizableTextView extends AppCompatTextView {
                 frontDrawable.getIntrinsicWidth() / 2 + x,
                 frontDrawable.getIntrinsicHeight() / 2 + y);
         invalidate();
+    }
+
+    @Override
+    public void setVisibility(final int visibility) {
+        if (getVisibility() == visibility) return;
+
+        int shortAnimationDuration = getResources().getInteger(
+                android.R.integer.config_longAnimTime);
+        final float currentScaleX = getScaleX();
+        final float currentScaleY = getScaleY();
+        if (visibility == VISIBLE) {
+            setScaleX(0);
+            setScaleY(0);
+            superSetVisibility(View.VISIBLE);
+            animate()
+                    .scaleX(currentScaleX)
+                    .scaleY(currentScaleY)
+                    .setDuration(shortAnimationDuration)
+                    .setListener(null);
+            return;
+        }
+        animate()
+                .scaleX(0)
+                .scaleY(0)
+                .setDuration(shortAnimationDuration)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        superSetVisibility(visibility);
+                        setScaleX(currentScaleX);
+                        setScaleY(currentScaleY);
+                    }
+                });
+    }
+
+    private void superSetVisibility(int visibility) {
+        super.setVisibility(visibility);
     }
 
     public void setAspectRatio(@AspectRatio int aspectRatio) {
