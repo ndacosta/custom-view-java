@@ -1,4 +1,4 @@
-package com.kickingmobiledev.customviewjava.ui.widgets;
+package com.kickingmobiledev.customtextview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -15,8 +15,6 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
-import com.kickingmobiledev.customviewjava.R;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -72,23 +70,13 @@ public class ResizableTextView extends AppCompatTextView {
     public ResizableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ResizableTextView);
-        final int N = a.getIndexCount();
-        for (int i = 0; i < N; i++) {
-            int attr = a.getIndex(i);
-            switch (attr) {
-                case R.styleable.ResizableTextView_front_drawable:
-                    frontDrawable = a.getDrawable(attr);
-                    if (frontDrawable != null) {
-                        frontDrawable.setBounds(0, 0,
-                                frontDrawable.getIntrinsicWidth(),
-                                frontDrawable.getIntrinsicHeight());
-                    }
-                    break;
-                case R.styleable.ResizableTextView_aspect_ratio:
-                    aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
-                    break;
-            }
+        frontDrawable = a.getDrawable(R.styleable.ResizableTextView_front_drawable);
+        if (frontDrawable != null) {
+            frontDrawable.setBounds(0, 0,
+                    frontDrawable.getIntrinsicWidth(),
+                    frontDrawable.getIntrinsicHeight());
         }
+        aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
         a.recycle();
     }
 
@@ -311,8 +299,8 @@ public class ResizableTextView extends AppCompatTextView {
         }
 
         @SuppressWarnings("hiding")
-        public static final Parcelable.Creator<ResizableTextView.SavedState> CREATOR =
-                new Parcelable.Creator<ResizableTextView.SavedState>() {
+        public static final Creator<SavedState> CREATOR =
+                new Creator<SavedState>() {
                     public ResizableTextView.SavedState createFromParcel(Parcel in) {
                         return new ResizableTextView.SavedState(in);
                     }

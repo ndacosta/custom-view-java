@@ -11,7 +11,7 @@ import android.text.TextWatcher;
 
 import com.kickingmobiledev.customviewjava.R;
 import com.kickingmobiledev.customviewjava.databinding.ActivitySection1Binding;
-import com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView;
+import com.kickingmobiledev.customtextview.ResizableTextView;
 
 public class Section1Activity extends AppCompatActivity implements TextWatcher {
 

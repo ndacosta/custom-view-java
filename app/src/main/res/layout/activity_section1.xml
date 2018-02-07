@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         tools:context="com.kickingmobiledev.customviewjava.ui.activities.Section1Activity">
 
-        <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
+        <com.kickingmobiledev.customtextview.ResizableTextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

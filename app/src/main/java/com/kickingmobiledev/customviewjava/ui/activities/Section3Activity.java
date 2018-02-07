@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.kickingmobiledev.customviewjava.R;
 import com.kickingmobiledev.customviewjava.databinding.ActivitySection3Binding;
-import com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView;
+import com.kickingmobiledev.customtextview.ResizableTextView;
 
 public class Section3Activity extends AppCompatActivity {
 

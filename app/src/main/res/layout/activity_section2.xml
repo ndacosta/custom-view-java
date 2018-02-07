@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
+    <com.kickingmobiledev.customtextview.ResizableTextView
         android:id="@+id/normalAspectRatio"
         android:layout_width="@dimen/text_view_fixed_width"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
+    <com.kickingmobiledev.customtextview.ResizableTextView
         android:id="@+id/aspectRation12"
         android:layout_width="@dimen/text_view_fixed_width"
         android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         app:layout_constraintStart_toEndOf="@+id/normalAspectRatio"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
+    <com.kickingmobiledev.customtextview.ResizableTextView
         android:id="@+id/aspectRation23"
         android:layout_width="@dimen/text_view_fixed_width"
         android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
         app:layout_constraintStart_toEndOf="@+id/aspectRation12"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.kickingmobiledev.customviewjava.ui.widgets.ResizableTextView
+    <com.kickingmobiledev.customtextview.ResizableTextView
         android:id="@+id/aspectRation11"
         android:layout_width="@dimen/text_view_fixed_width"
         android:layout_height="wrap_content"
