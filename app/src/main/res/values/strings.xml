@@ -11,6 +11,7 @@
     <string name="section6">Section 6: Change drawable dynamically</string>
     <string name="section7">Section 7: Change drawable state</string>
     <string name="section8">Section 8: Move drawable</string>
+    <string name="section10">Section 10: Span text from xml</string>
     <string name="section2_description">Same width, different ratios</string>
     <string name="edit_text_hint">Change text here</string>
     <string name="banned_text">This is a banned TextView</string>

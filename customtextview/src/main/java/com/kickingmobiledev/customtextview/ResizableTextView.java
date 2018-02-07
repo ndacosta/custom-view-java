@@ -2,20 +2,34 @@ package com.kickingmobiledev.customtextview;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.content.res.XmlResourceParser;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringDef;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.widget.AppCompatTextView;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
+import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -45,12 +59,21 @@ public class ResizableTextView extends AppCompatTextView {
      */
     public static final int ONE_TO_1_ASPECT_RATIO = 3;
 
-
     @IntDef({NORMAL_ASPECT_RATIO, ONE_TO_2_ASPECT_RATIO, TWO_TO_3_ASPECT_RATIO, ONE_TO_1_ASPECT_RATIO})
     @Retention(RetentionPolicy.SOURCE)
     public @interface AspectRatio {
     }
 
+    public static final String UNDERLINE = "underline";
+    public static final String ITALIC = "italic";
+    public static final String STRIKE = "strike";
+    public static final String NORMAL = "normal";
+    public static final String BOLD = "bold";
+
+    @StringDef({UNDERLINE, ITALIC, STRIKE, NORMAL, BOLD})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface SpanType {
+    }
 
     private int aspectRatio;
 
@@ -77,7 +100,80 @@ public class ResizableTextView extends AppCompatTextView {
                     frontDrawable.getIntrinsicHeight());
         }
         aspectRatio = a.getInt(R.styleable.ResizableTextView_aspect_ratio, NORMAL_ASPECT_RATIO);
+        int textSpanId = a.getResourceId(R.styleable.ResizableTextView_text_spans, View.NO_ID);
+        if (textSpanId != View.NO_ID) {
+            XmlResourceParser parser = a.getResources().getXml(textSpanId);
+            applySpans(parser);
+        }
         a.recycle();
+    }
+
+    private void applySpans(XmlResourceParser parser) {
+        SpannableString spannable = new SpannableString(getText());
+        final int outerDepth = parser.getDepth();
+        int type;
+
+        int spanStart;
+        int spanEnd;
+        String[] spanTypes;
+        String types;
+        final int startText = 0;
+        final int endText = spannable.length();
+        Object span;
+        try {
+            while ((type = parser.next()) != XmlResourceParser.END_DOCUMENT
+                    && (parser.getDepth() > outerDepth || type != XmlPullParser.END_TAG)) {
+                if (type != XmlPullParser.START_TAG) {
+                    continue;
+                }
+
+                if (parser.getName().equals("configuration")) {
+                    continue;
+                }
+
+                if (!parser.getName().equals("span")) {
+                    // TODO: 2/7/18 log an error
+                    continue;
+                }
+
+                types = parser.getAttributeValue(null, "type");
+                if (types == null) {
+                    continue;
+                }
+
+                spanTypes = types.split("\\|");
+                for (int i = 0; i < spanTypes.length; i++) {
+                    spanStart = parser.getAttributeIntValue(null, "start", startText);
+                    spanEnd = parser.getAttributeIntValue(null, "end", endText);
+                    if (spanStart < startText || spanStart > spanEnd || spanEnd > endText) {
+                        continue;
+                    }
+                    span = extractSpan(spanTypes[i]);
+                    if (span == null) continue;
+                    spannable.setSpan(span, spanStart, spanEnd, Spanned.SPAN_INCLUSIVE_EXCLUSIVE);
+                }
+            }
+        } catch (IOException | XmlPullParserException e) {
+            Log.e("XmlPullParserException", e.getMessage());
+        }
+        setText(spannable);
+    }
+
+    private Object extractSpan(String type) {
+        switch (type) {
+            case ITALIC:
+                return new StyleSpan(Typeface.ITALIC);
+            case STRIKE:
+                return new StrikethroughSpan();
+            case UNDERLINE:
+                return new UnderlineSpan();
+            case NORMAL:
+                return new StyleSpan(Typeface.NORMAL);
+            case BOLD:
+                return new StyleSpan(Typeface.BOLD);
+            default:
+                return null;
+        }
     }
 
     @Override
