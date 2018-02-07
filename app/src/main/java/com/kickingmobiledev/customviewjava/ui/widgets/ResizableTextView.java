@@ -151,6 +151,15 @@ public class ResizableTextView extends AppCompatTextView {
         }
     }
 
+    @Override
+    public void drawableHotspotChanged(float x, float y) {
+        super.drawableHotspotChanged(x, y);
+
+        if (frontDrawable != null) {
+            DrawableCompat.setHotspot(frontDrawable, x, y);
+        }
+    }
+
     /**
      * Handles drawable selection and movement
      */
