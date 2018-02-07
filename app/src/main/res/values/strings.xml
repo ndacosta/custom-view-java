@@ -17,4 +17,5 @@
     <string name="banned_text">This is a banned TextView</string>
     <string name="banned">Ban</string>
     <string name="approved">Approve</string>
+    <string name="style_text">Style Text</string>
 </resources>
